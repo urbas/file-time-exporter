@@ -1,0 +1,21 @@
+name: builder
+on: push
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - run: |
+          eval "$(nix print-dev-env)"
+
+          parallel --color --tagstring "{}>" ::: \
+            "black --check ." \
+            "flake8" \
+            "isort --check --diff file_time_exporter tests setup.py" \
+            "nix build" \
+            "prettier --ignore-path .gitignore --prose-wrap=always --write ./**/*.md" \
+            "pyright" \
+            "pytest"

@@ -1,0 +1,30 @@
+# Track the latest file in a directory.
+- id: example-daily-logs
+  strategy: glob-latest
+  config:
+    directory: ./
+    glob: "tests/files/timestamped-logs/*.log"
+    timestamp_extraction:
+      strategy: from-file-name
+      config:
+        # You can optionally use a regex pattern to extract the timestamp from the file name.
+        # The regex pattern must contain a single group that captures the timestamp.
+        regex_pattern: "^daily-log-(.*)\\.log$"
+        # Uses `datetime.strptime` format.
+        pattern: "%Y-%m-%dT%H:%M:%S"
+
+# Track the age of a single file.
+- id: readme
+  strategy: single-file
+  config:
+    path: README.md
+
+# Track the age of a symlink.
+- id: symlink
+  strategy: single-file
+  config:
+    path: tests/files/symlinks/symlink
+    timestamp_extraction:
+      config:
+        # This makes sure that the age of the symlink is taken, not the age of the target file.
+        use_symlink_timestamp: True
