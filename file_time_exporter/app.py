@@ -24,8 +24,17 @@ KNOWN_STRATEGIES: Dict[str, FileLookupStrategy] = {
     help="Refresh interval in seconds",
     show_default=True,
 )
-@click.option("--port", default=9426, type=click.INT, help="Port to listen on")
-def main(config_file: str, refresh_interval: int, port: int):
+@click.option(
+    "--port", default=9426, type=click.INT, help="Port to listen on", show_default=True
+)
+@click.option(
+    "--listen-address",
+    default="localhost",
+    type=click.STRING,
+    help="Address to listen on",
+    show_default=True,
+)
+def main(config_file: str, refresh_interval: int, port: int, listen_address: str):
     """
     A Prometheus exporter that tracks modification timestamps of files as
     specified in the CONFIG_FILE yaml configuration.
@@ -42,7 +51,7 @@ def main(config_file: str, refresh_interval: int, port: int):
     with open(config_file) as config_file_handle:
         config = yaml.safe_load(config_file_handle)
 
-    start_http_server(port)
+    start_http_server(port, addr=listen_address)
 
     while True:
         for config_entry in config:
