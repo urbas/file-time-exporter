@@ -3,19 +3,18 @@ on: push
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@main
       - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
+      # - uses: DeterminateSystems/magic-nix-cache-action@main
       - run: |
           eval "$(nix print-dev-env)"
 
-          parallel --color --tagstring "{}>" ::: \
-            "black --check ." \
-            "flake8" \
-            "isort --check --diff file_time_exporter tests setup.py" \
-            "nix build" \
-            "prettier --ignore-path .gitignore --prose-wrap=always --write ./**/*.md" \
+          parallel --tagstring "{}>" ::: \
             "pyright" \
-            "pytest"
+            "pytest" \
+            "ruff check" \
+            "ruff format --check" \
+            "treefmt --ci"
+      - run: "nix build -Lv"

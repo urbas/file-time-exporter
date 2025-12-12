@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["file_time_exporter"]
+
+[project]
+name = "file-time-exporter"
+version = "0.1.0"
+description = "A Prometheus exporter that exports file timestamps."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = ["click", "prometheus-client", "pyyaml"]
+
+[project.scripts]
+file-time-exporter = "file_time_exporter.app:main"
