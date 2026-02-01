@@ -1,6 +1,6 @@
 import logging
 import time
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable
 
 import click
 import yaml
@@ -8,9 +8,9 @@ from prometheus_client import Gauge, Summary, start_http_server
 
 from file_time_exporter.lookup_strategies import glob_latest, single_file
 
-FileLookupStrategy = Callable[[Dict[str, Any]], Optional[float]]
+FileLookupStrategy = Callable[[dict[str, Any]], float | None]
 
-KNOWN_STRATEGIES: Dict[str, FileLookupStrategy] = {
+KNOWN_STRATEGIES: dict[str, FileLookupStrategy] = {
     "single-file": single_file.lookup_timestamp,
     "glob-latest": glob_latest.lookup_timestamp,
 }

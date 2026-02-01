@@ -12,9 +12,9 @@ jobs:
           eval "$(nix print-dev-env)"
 
           parallel --tagstring "{}>" ::: \
-            "pyright" \
             "pytest" \
             "ruff check" \
             "ruff format --check" \
-            "treefmt --ci"
+            "treefmt --ci" \
+            "ty check"
       - run: "nix build -Lv"

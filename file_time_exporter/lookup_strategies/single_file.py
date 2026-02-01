@@ -1,10 +1,10 @@
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 from file_time_exporter import timestamp_extractors
 
 
-def lookup_timestamp(config: Dict[str, Any]) -> Optional[float]:
+def lookup_timestamp(config: dict[str, Any]) -> float | None:
     """
     Lookup the timestamp of a single file.
     """
