@@ -5,9 +5,7 @@ from file_time_exporter import timestamp_extractors
 
 
 def lookup_timestamp(config: dict[str, Any]) -> float | None:
-    """
-    Returns the timestamp of the latest file matching the glob pattern.
-    """
+    """Returns the timestamp of the latest file matching the glob pattern."""
     paths = Path(config["directory"]).glob(config["glob"])
     timestamp_extractor = timestamp_extractors.get_strategy(config)
     all_timestamps = [timestamp_extractor(path) for path in paths]

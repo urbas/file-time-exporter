@@ -1,6 +1,8 @@
 import logging
 import time
-from typing import Any, Callable
+from collections.abc import Callable
+from pathlib import Path
+from typing import Any
 
 import click
 import yaml
@@ -18,7 +20,9 @@ LOG = logging.getLogger(__name__)
 
 
 @click.command()
-@click.argument("config_file", type=click.Path(exists=True, file_okay=True))
+@click.argument(
+    "config_file", type=click.Path(exists=True, file_okay=True, path_type=Path)
+)
 @click.option(
     "--refresh-interval",
     default=10,
@@ -27,7 +31,11 @@ LOG = logging.getLogger(__name__)
     show_default=True,
 )
 @click.option(
-    "--port", default=9426, type=click.INT, help="Port to listen on", show_default=True
+    "--port",
+    default=9426,
+    type=click.INT,
+    help="Port to listen on",
+    show_default=True,
 )
 @click.option(
     "--listen-address",
@@ -49,18 +57,16 @@ LOG = logging.getLogger(__name__)
     help="Decrease verbosity. Can be used multiple times.",
 )
 def main(
-    config_file: str,
+    config_file: Path,
     refresh_interval: int,
     port: int,
     listen_address: str,
     verbose: int,
     quiet: int,
 ):
-    """
-    A Prometheus exporter that tracks modification timestamps of files as
+    """A Prometheus exporter that tracks modification timestamps of files as
     specified in the CONFIG_FILE yaml configuration.
     """
-
     # Set up logging verbosity
     verbosity = verbose - quiet
     if verbosity >= 2:
@@ -83,7 +89,7 @@ def main(
         ["id"],
     )
 
-    with open(config_file) as config_file_handle:
+    with config_file.open("r") as config_file_handle:
         config = yaml.safe_load(config_file_handle)
     LOG.debug("Loaded config with %d entries", len(config))
 
@@ -97,13 +103,15 @@ def main(
             strategy = KNOWN_STRATEGIES.get(config_entry["strategy"])
             if strategy is None:
                 raise NotImplementedError(
-                    f"Unknown file lookup strategy '{config_entry['strategy']}'."
+                    f"Unknown file lookup strategy '{config_entry['strategy']}'.",
                 )
             file_timestamp = strategy(config_entry["config"])
             if file_timestamp is not None:
                 file_time.labels(config_entry["id"]).set(file_timestamp)
                 LOG.debug(
-                    "Set timestamp for %s to %f", config_entry["id"], file_timestamp
+                    "Set timestamp for %s to %f",
+                    config_entry["id"],
+                    file_timestamp,
                 )
             else:
                 LOG.debug("No timestamp found for %s", config_entry["id"])

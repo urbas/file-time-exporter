@@ -1,5 +1,5 @@
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable
 
 
 def by_glob(base_dir: Path, glob_pattern: str) -> Iterable[Path]:

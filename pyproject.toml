@@ -6,13 +6,36 @@ build-backend = "setuptools.build_meta"
 where = ["."]
 include = ["file_time_exporter*"]
 
+[tool.ruff.lint]
+select = [
+  "A",
+  "B",
+  "E",
+  "F",
+  "G",
+  "I",
+  "PLE",
+  "PTH",
+  "Q",
+  "RUF",
+  "S",
+]
+ignore = [
+  "S101",
+]
+
 [project]
 name = "file-time-exporter"
 version = "0.1.0"
 description = "A Prometheus exporter that exports file timestamps."
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = ["click", "prometheus-client", "pyyaml"]
+dependencies = [
+  "click",
+  "jsonpath-ng",
+  "prometheus-client",
+  "pyyaml",
+]
 
 [project.scripts]
 file-time-exporter = "file_time_exporter.app:main"
