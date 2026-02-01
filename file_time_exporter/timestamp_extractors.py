@@ -1,13 +1,13 @@
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable, Dict
+from typing import Any, Callable
 
-TimestampExtractor = Callable[[Path, Dict[str, Any]], float]
+TimestampExtractor = Callable[[Path, dict[str, Any]], float]
 ConfiguredTimestampExtractor = Callable[[Path], float]
 
 
-def get_strategy(config: Dict[str, Any]) -> ConfiguredTimestampExtractor:
+def get_strategy(config: dict[str, Any]) -> ConfiguredTimestampExtractor:
     """
     Get a timestamp extractor by name.
     """
@@ -26,7 +26,7 @@ def get_strategy(config: Dict[str, Any]) -> ConfiguredTimestampExtractor:
     return lambda path: strategy(path, timestamp_extraction_config.get("config", {}))
 
 
-def timestamp_from_filename(path: Path, config: Dict[str, Any]) -> float:
+def timestamp_from_filename(path: Path, config: dict[str, Any]) -> float:
     """
     Extract a timestamp from a filename.
     """
@@ -38,7 +38,7 @@ def timestamp_from_filename(path: Path, config: Dict[str, Any]) -> float:
     return datetime.strptime(name, config["pattern"]).timestamp()
 
 
-def stat_timestamp(path: Path, config: Dict[str, Any]) -> float:
+def stat_timestamp(path: Path, config: dict[str, Any]) -> float:
     """
     Extract a timestamp from a file's stat.
     """
@@ -47,7 +47,7 @@ def stat_timestamp(path: Path, config: Dict[str, Any]) -> float:
     return path.stat().st_mtime
 
 
-KNOWN_TIMESTAMP_EXTRACTORS: Dict[str, TimestampExtractor] = {
+KNOWN_TIMESTAMP_EXTRACTORS: dict[str, TimestampExtractor] = {
     "from-file-name": timestamp_from_filename,
     "from-file-stat": stat_timestamp,
 }

@@ -50,14 +50,15 @@
         packages.default = pkg;
         devShells.default = mkShell {
           packages = [
+            nixd
             nixfmt-rfc-style
             nodePackages.prettier
             parallel
             pkg-editable
             prek
-            pyright
             ruff
             treefmt
+            ty
           ];
           inputsFrom = [
             pkg

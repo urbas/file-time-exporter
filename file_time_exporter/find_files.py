@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Iterable, Optional
+from typing import Iterable
 
 
 def by_glob(base_dir: Path, glob_pattern: str) -> Iterable[Path]:
@@ -7,7 +7,7 @@ def by_glob(base_dir: Path, glob_pattern: str) -> Iterable[Path]:
     return base_dir.glob(glob_pattern)
 
 
-def newest_file(paths: Iterable[Path]) -> Optional[Path]:
+def newest_file(paths: Iterable[Path]) -> Path | None:
     """Return the newest file from a list of paths."""
     return max(paths, key=lambda path: path.stat().st_mtime)
 
