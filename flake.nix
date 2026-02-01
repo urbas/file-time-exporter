@@ -22,6 +22,7 @@
 
           propagatedBuildInputs = with python3Packages; [
             click
+            jsonpath-ng
             prometheus-client
             pyyaml
           ];

@@ -28,3 +28,14 @@
       config:
         # This makes sure that the age of the symlink is taken, not the age of the target file.
         use_symlink_timestamp: True
+
+# Track the timestamp extracted from the JSON file.
+- id: json
+  strategy: single-file
+  config:
+    path: tests/files/from-json-content.json
+    timestamp_extraction:
+      strategy: from-json-content
+      config:
+        jsonpath: foo.date
+        timestamp_pattern: "%Y-%m-%dT%H:%M:%S%z"
