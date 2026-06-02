@@ -31,7 +31,7 @@
             pytestCheckHook
           ];
 
-          pytestFlagsArray = [
+          pytestFlags = [
             "-v"
             "tests"
           ];
@@ -52,11 +52,11 @@
         devShells.default = mkShell {
           packages = [
             nixd
-            nixfmt-rfc-style
-            nodePackages.prettier
+            nixfmt
             parallel
             pkg-editable
             prek
+            prettier
             ruff
             treefmt
             ty
